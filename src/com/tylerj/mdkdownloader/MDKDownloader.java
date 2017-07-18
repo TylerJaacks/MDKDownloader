@@ -10,9 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -122,7 +119,7 @@ public class MDKDownloader {
         }
 
         for (String s : GetMDKVersions()) {
-            System.out.print(s);
+            System.out.println(s);
         }
     }
 
@@ -162,23 +159,16 @@ public class MDKDownloader {
             JSONObject object = (JSONObject) obj;
             JSONObject number = (JSONObject) object.get("number");
 
-            ArrayList<String> mdklist = new ArrayList<>();
+            for (int i = 1; i < 2415; i++) {
+                if (number.get("" + i) != null) {
+                    JSONObject id = (JSONObject) number.get("" + i);
+                    String mcversion = (String) id.get("mcversion");
+                    String mdkversion = (String) id.get("version");
 
-            for (int i = 0; i < 2414; i++) {
-                int _index = i + 1;
-                String index = "" + _index;
+                    String completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";
 
-                System.out.println(index);
-
-                JSONObject id = (JSONObject) number.get(index);
-//                String mcversion = (String) id.get("mcversion");
-//                String mdkversion = (String) id.get("version");
-//
-//                String completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";
-//
-//                mdklist.add(completeName);
-
-                System.out.println(id.toString());
+                    MDKVersions.add(completeName);
+                }
             }
 
         } catch (Exception e) {

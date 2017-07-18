@@ -128,7 +128,7 @@ public class MDKDownloader {
         JSONParser parser = new JSONParser();
 
         try {
-            Object obj = parser.parse(new FileReader("D:\\Documents\\Projects\\IntelliJ IDEA Projects\\MDKDownloader\\json\\mdk.json"));
+            Object obj = parser.parse(new FileReader("json/mdk.json"));
 
             JSONObject object = (JSONObject) obj;
             JSONObject number = (JSONObject) object.get("number");

@@ -1,29 +1,35 @@
 package com.tylerj.mdkdownloader;
 
-import java.io.File;
-import java.io.IOException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class MDKDownloader {
-    String URLBase = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
-    String MDKVersion = "";
-    String MinecraftVersion = "";
-    String CompleteURL;
-    String ModName = "";
-    String BaseDirectory = "";
-    String ZipName = "";
-    String ZipFilePath = "";
-    String DestDirectory = "";
-    final int BUFFER_SIZE = 4096;
+    private final String URLBase = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
+    private final String MCVERSIONSJSONURL = "http://s3.amazonaws.com/Minecraft.Download/versions/versions";
+    private final String MDKVERSIONSJSONURL = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/json";
+    private final int BUFFER_SIZE = 4096;
+
+    private String MDKVersion = "";
+    private String MinecraftVersion = "";
+    private String CompleteURL;
+    private String ModName = "";
+    private String BaseDirectory = "";
+    private String ZipName = "";
+    private String ZipFilePath = "";
+    private String DestDirectory = "";
 
     /**
      * Creates a new instance that downloads the Forge MDK.
@@ -44,7 +50,7 @@ public class MDKDownloader {
         DestDirectory = BaseDirectory + modName;
     }
 
-    private Path download(String sourceURL, String targetDirectory) throws IOException {
+    private Path DownloadFile(String sourceURL, String targetDirectory) throws IOException {
         URL url = new URL(sourceURL);
         String fileName = sourceURL.substring(sourceURL.lastIndexOf('/') + 1, sourceURL.length());
         Path targetPath = new File(targetDirectory + File.separator + fileName).toPath();
@@ -53,7 +59,7 @@ public class MDKDownloader {
         return targetPath;
     }
 
-    private void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+    private void ExtractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
 
         byte[] bytesIn = new byte[BUFFER_SIZE];
@@ -67,7 +73,7 @@ public class MDKDownloader {
         bos.close();
     }
 
-    public void unzip(String zipFilePath, String destDirectory) throws IOException {
+    public void Unzip(String zipFilePath, String destDirectory) throws IOException {
         File destDir = new File(destDirectory);
 
         if (!destDir.exists()) {
@@ -80,7 +86,7 @@ public class MDKDownloader {
         while (entry != null) {
             String filePath = destDirectory + File.separator + entry.getName();
             if (!entry.isDirectory()) {
-                extractFile(zipIn, filePath);
+                ExtractFile(zipIn, filePath);
             } else {
                 File dir = new File(filePath);
                 dir.mkdir();
@@ -90,18 +96,12 @@ public class MDKDownloader {
         }
 
         zipIn.close();
-
-
     }
 
-    /**
-     * Prepares the enviroment, by remove useless junk.
-     * @throws Exception if anything fails.
-     */
-    public void prepareEnviroment() throws Exception {
-        download(CompleteURL, BaseDirectory);
+    public void PrepareEnvironment() throws Exception {
+        DownloadFile(CompleteURL, BaseDirectory);
 
-        unzip(ZipFilePath, DestDirectory);
+        Unzip(ZipFilePath, DestDirectory);
 
         ArrayList<File> filesToDelete = new ArrayList<>();
 
@@ -120,6 +120,72 @@ public class MDKDownloader {
         for (File f : filesToDelete) {
             f.delete();
         }
+
+        for (String s : GetMDKVersions()) {
+            System.out.print(s);
+        }
+    }
+
+    public ArrayList<String> GetMCVersions() {
+        ArrayList<String> MinecraftVersions = new ArrayList<>();
+
+        JSONParser parser = new JSONParser();
+
+        try {
+            Object obj = parser.parse(new FileReader("D:\\Documents\\Projects\\IntelliJ IDEA Projects\\MDKDownloader\\json\\minecraft.json"));
+
+            JSONObject jsonObject = (JSONObject) obj;
+
+            JSONArray versions = (JSONArray) jsonObject.get("versions");
+
+            for (int i = 0; i < versions.size(); i++) {
+                JSONObject mcversion = (JSONObject) versions.get(i);
+
+                MinecraftVersions.add(mcversion.toString());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  MinecraftVersions;
+    }
+
+    public ArrayList<String> GetMDKVersions() {
+        ArrayList<String> MDKVersions = new ArrayList<>();
+
+        JSONParser parser = new JSONParser();
+
+        try {
+            Object obj = parser.parse(new FileReader("D:\\Documents\\Projects\\IntelliJ IDEA Projects\\MDKDownloader\\json\\mdk.json"));
+
+            JSONObject object = (JSONObject) obj;
+            JSONObject number = (JSONObject) object.get("number");
+
+            ArrayList<String> mdklist = new ArrayList<>();
+
+            for (int i = 0; i < 2414; i++) {
+                int _index = i + 1;
+                String index = "" + _index;
+
+                System.out.println(index);
+
+                JSONObject id = (JSONObject) number.get(index);
+//                String mcversion = (String) id.get("mcversion");
+//                String mdkversion = (String) id.get("version");
+//
+//                String completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";
+//
+//                mdklist.add(completeName);
+
+                System.out.println(id.toString());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return MDKVersions;
     }
 }
 

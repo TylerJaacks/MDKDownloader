@@ -15,7 +15,6 @@ import java.util.zip.ZipInputStream;
 
 public class MDKDownloader {
     private final String URLBase = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
-    private final String MCVERSIONSJSONURL = "http://s3.amazonaws.com/Minecraft.Download/versions/versions";
     private final String MDKVERSIONSJSONURL = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/json";
     private final int BUFFER_SIZE = 4096;
 
@@ -123,31 +122,6 @@ public class MDKDownloader {
         }
     }
 
-    public ArrayList<String> GetMCVersions() {
-        ArrayList<String> MinecraftVersions = new ArrayList<>();
-
-        JSONParser parser = new JSONParser();
-
-        try {
-            Object obj = parser.parse(new FileReader("D:\\Documents\\Projects\\IntelliJ IDEA Projects\\MDKDownloader\\json\\minecraft.json"));
-
-            JSONObject jsonObject = (JSONObject) obj;
-
-            JSONArray versions = (JSONArray) jsonObject.get("versions");
-
-            for (int i = 0; i < versions.size(); i++) {
-                JSONObject mcversion = (JSONObject) versions.get(i);
-
-                MinecraftVersions.add(mcversion.toString());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return  MinecraftVersions;
-    }
-
     public ArrayList<String> GetMDKVersions() {
         ArrayList<String> MDKVersions = new ArrayList<>();
 
@@ -178,4 +152,3 @@ public class MDKDownloader {
         return MDKVersions;
     }
 }
-

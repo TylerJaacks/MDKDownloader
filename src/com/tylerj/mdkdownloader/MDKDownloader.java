@@ -1,6 +1,5 @@
 package com.tylerj.mdkdownloader;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -14,36 +13,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class MDKDownloader {
-    private final String URLBase = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
-    private final String MDKVERSIONSJSONURL = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/json";
+    private final String URLBASE = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
     private final int BUFFER_SIZE = 4096;
 
-    private String MDKVersion = "";
-    private String MinecraftVersion = "";
-    private String CompleteURL;
     private String ModName = "";
     private String BaseDirectory = "";
     private String ZipName = "";
-    private String ZipFilePath = "";
-    private String DestDirectory = "";
 
     /**
      * Creates a new instance that downloads the Forge MDK.
-     * @param mcVersion The Minecraft version you want to use.
-     * @param forgeVersion Forge or MDK version you want to use.
-     * @param modName The name of your mod.
-     * @param path Where you want to store the mod.
      */
-    public MDKDownloader(String mcVersion, String forgeVersion, String modName, String path) {
-        MinecraftVersion = mcVersion;
-        MDKVersion = forgeVersion;
-        ModName = modName;
-        BaseDirectory = path;
+    public MDKDownloader() {
 
-        ZipName = "forge-" + MinecraftVersion + "-" + MDKVersion + "-mdk" + ".zip";
-        CompleteURL = URLBase + "/" + MinecraftVersion + "-" + MDKVersion + "/" + ZipName;
-        ZipFilePath = BaseDirectory + ZipName;
-        DestDirectory = BaseDirectory + modName;
     }
 
     private Path DownloadFile(String sourceURL, String targetDirectory) throws IOException {
@@ -94,31 +75,32 @@ public class MDKDownloader {
         zipIn.close();
     }
 
-    public void PrepareEnvironment() throws Exception {
-        DownloadFile(CompleteURL, BaseDirectory);
+    public void PrepareEnvironment(String version, String dest, String name) throws Exception {
+        String s1 = version.substring(6, version.length());
+        String s2 = s1.substring(0, s1.length() - 4);
 
-        Unzip(ZipFilePath, DestDirectory);
+        DownloadFile(URLBASE + s2 + "/" + version + ".zip", dest);
+
+        System.out.println(s2);
+
+        Unzip(dest + version + ".zip", dest + "/" + name);
 
         ArrayList<File> filesToDelete = new ArrayList<>();
 
-        filesToDelete.add(new File(BaseDirectory + ZipName));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "README.txt"));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "Paulscode SoundSystem CodecIBXM License.txt"));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "Paulscode IBXM Library License.txt"));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "MinecraftForge-Credits.txt"));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "LICENSE-new.txt"));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "forge-" + MinecraftVersion + "-" + MDKVersion + "-changelog.txt"));
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "CREDITS-fml.txt"));
+        filesToDelete.add(new File(dest + version + ".zip"));
+        filesToDelete.add(new File(dest + name + "/" + "README.txt"));
+        filesToDelete.add(new File(dest + name + "/" + "Paulscode SoundSystem CodecIBXM License.txt"));
+        filesToDelete.add(new File(dest + name + "/" + "Paulscode IBXM Library License.txt"));
+        filesToDelete.add(new File(dest + name + "/" + "MinecraftForge-Credits.txt"));
+        filesToDelete.add(new File(dest + name + "/" + "LICENSE-new.txt"));
+        filesToDelete.add(new File(dest + name + "/" + "forge-" + s2 + "-changelog.txt"));
+        filesToDelete.add(new File(dest + name + "/" + "CREDITS-fml.txt"));
 
         // TODO Delete the eclipse folder.
         filesToDelete.add(new File(BaseDirectory + ModName + "/" + "eclipse/"));
 
         for (File f : filesToDelete) {
             f.delete();
-        }
-
-        for (String s : GetMDKVersions()) {
-            System.out.println(s);
         }
     }
 

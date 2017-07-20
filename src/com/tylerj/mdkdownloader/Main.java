@@ -1,25 +1,66 @@
 package com.tylerj.mdkdownloader;
 
-public class Main {
-    static String MDKVersion = "";
-    static String MinecraftVersion = "";
-    static String modName = "";
-    static String baseDirectory = "";
-    static MDKDownloader mdkDownloader;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
-    public static void main(String[] args) throws Exception {
-        MinecraftVersion = args[0];
-        MDKVersion = args[1];
-        modName = args[2];
+import javax.xml.soap.Text;
 
-        baseDirectory = System.getProperty("user.home") + "/";
+public class Main extends Application {
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-        System.out.println("Minecraft Version: " + MinecraftVersion);
-        System.out.println("MDK Version: " + MDKVersion);
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("MDKDownloader v1.0");
 
-        mdkDownloader = new MDKDownloader(MinecraftVersion, MDKVersion, modName, baseDirectory);
+        MDKDownloader mdkDownloader = new MDKDownloader();
 
-        mdkDownloader.PrepareEnvironment();
+        StackPane root = new StackPane();
+        Label programLabel = new Label();
+
+        Label modNameLabel = new Label();
+        TextField modNameTextField = new TextField();
+
+        Label comboBoxLabel = new Label();
+        ComboBox comboBox = new ComboBox();
+
+        Button btn = new Button();
+
+        btn.setText("Download MDK");
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    mdkDownloader.PrepareEnvironment("forge-1.12-14.21.1.2415-mdk", System.getProperty("user.home") + "/", "MyFirstMod");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        for (String s : mdkDownloader.GetMDKVersions()) {
+            comboBox.getItems().add(s);
+        }
+
+        programLabel.alignmentProperty();
+
+        root.getChildren().add(programLabel);
+
+        root.getChildren().add(btn);
+        //root.getChildren().add(comboBox);
+
+        primaryStage.setScene(new Scene(root, 300, 400));
+        primaryStage.show();
     }
 }
-

@@ -3,16 +3,16 @@ package com.tylerj.mdkdownloader;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
-import javax.xml.soap.Text;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -22,45 +22,54 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MDKDownloader v1.0");
+        primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("file:icon.png"));
 
         MDKDownloader mdkDownloader = new MDKDownloader();
 
-        StackPane root = new StackPane();
-        Label programLabel = new Label();
+        GridPane grid = new GridPane();
+        Scene scene = new Scene(grid, 400, 150);
 
-        Label modNameLabel = new Label();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        Label modNameLabel = new Label("Mod Name:");
+        grid.add(modNameLabel, 0, 1);
+
         TextField modNameTextField = new TextField();
+        modNameTextField.setMinWidth(250);
+        grid.add(modNameTextField, 1, 1);
 
-        Label comboBoxLabel = new Label();
-        ComboBox comboBox = new ComboBox();
+        Label forgeVersionLabel = new Label("Forge Version:");
+        grid.add(forgeVersionLabel, 0, 2);
 
-        Button btn = new Button();
+        ComboBox forgeVersionsCombobox = new ComboBox();
+        forgeVersionsCombobox.setMinWidth(250);
+        grid.add(forgeVersionsCombobox, 1, 2);
 
-        btn.setText("Download MDK");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        Button prepareEnviromentButton = new Button();
+        prepareEnviromentButton.setMinWidth(250);
+        grid.add(prepareEnviromentButton, 1, 4);
 
+        for (String s : mdkDownloader.GetMDKVersions()) {
+            forgeVersionsCombobox.getItems().add(s);
+        }
+
+        prepareEnviromentButton.setText("Download MDK");
+        prepareEnviromentButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    mdkDownloader.PrepareEnvironment("forge-1.12-14.21.1.2415-mdk", System.getProperty("user.home") + "/", "MyFirstMod");
+                    mdkDownloader.PrepareEnvironment(forgeVersionsCombobox.getValue().toString(), System.getProperty("user.home") + "/", modNameTextField.getText());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        for (String s : mdkDownloader.GetMDKVersions()) {
-            comboBox.getItems().add(s);
-        }
-
-        programLabel.alignmentProperty();
-
-        root.getChildren().add(programLabel);
-
-        root.getChildren().add(btn);
-        //root.getChildren().add(comboBox);
-
-        primaryStage.setScene(new Scene(root, 300, 400));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 }

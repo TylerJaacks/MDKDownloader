@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MDKDownloader:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MDKDownloader_jar</output-path>
+    <root id="archive" name="MDKDownloader.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="MDKDownloader" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-4.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/hamcrest-core-1.1.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/icon.png" />
+    </root>
+  </artifact>
+</component>

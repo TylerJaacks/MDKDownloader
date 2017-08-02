@@ -127,7 +127,9 @@ public class MDKDownloader {
                     String mcversion = (String) id.get("mcversion");
                     String mdkversion = (String) id.get("version");
 
-                    if (mdkversion.contains("1.1") || mdkversion.contains("1.2") || mdkversion.contains("1.3") || mdkversion.contains("1.4") || mdkversion.contains("1.5") || mdkversion.contains("1.6") || mdkversion.contains("1.7")) {
+                    if (mdkversion.contains("1.1") || mdkversion.contains("1.2") || mdkversion.contains("1.3")
+                            || mdkversion.contains("1.4") || mdkversion.contains("1.5") || mdkversion.contains("1.6")
+                            || mdkversion.contains("1.7")) {
                         completeName = "forge-" + mcversion + "-" + mdkversion + "-src";
                     } else {
                         completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";

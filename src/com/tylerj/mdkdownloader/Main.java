@@ -23,7 +23,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MDKDownloader v1.0");
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+
+        // TODO Fix broken icon.
+        //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 
         MDKDownloader mdkDownloader = new MDKDownloader();
 

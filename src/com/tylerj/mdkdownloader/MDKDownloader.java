@@ -1,5 +1,6 @@
 package com.tylerj.mdkdownloader;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -20,20 +21,15 @@ public class MDKDownloader {
     private String BaseDirectory = "";
     private String ZipName = "";
 
-    /**
-     * Creates a new instance that downloads the Forge MDK.
-     */
     public MDKDownloader() {
-
+        // TODO Download JSON.
     }
 
-    private Path DownloadFile(String sourceURL, String targetDirectory) throws IOException {
+    private void DownloadFile(String sourceURL, String targetDirectory) throws IOException {
         URL url = new URL(sourceURL);
         String fileName = sourceURL.substring(sourceURL.lastIndexOf('/') + 1, sourceURL.length());
         Path targetPath = new File(targetDirectory + File.separator + fileName).toPath();
         Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-        return targetPath;
     }
 
     private void ExtractFile(ZipInputStream zipIn, String filePath) throws IOException {
@@ -50,7 +46,7 @@ public class MDKDownloader {
         bos.close();
     }
 
-    public void Unzip(String zipFilePath, String destDirectory) throws IOException {
+    private void Unzip(String zipFilePath, String destDirectory) throws IOException {
         File destDir = new File(destDirectory);
 
         if (!destDir.exists()) {
@@ -75,7 +71,7 @@ public class MDKDownloader {
         zipIn.close();
     }
 
-    public void PrepareEnvironment(String version, String dest, String name) throws Exception {
+    protected void PrepareEnvironment(String version, String dest, String name) throws Exception {
         String s1 = version.substring(6, version.length());
         String s2 = s1.substring(0, s1.length() - 4);
 
@@ -95,21 +91,26 @@ public class MDKDownloader {
         filesToDelete.add(new File(dest + name + "/" + "LICENSE-new.txt"));
         filesToDelete.add(new File(dest + name + "/" + "forge-" + s2 + "-changelog.txt"));
         filesToDelete.add(new File(dest + name + "/" + "CREDITS-fml.txt"));
-
-        // TODO Delete the eclipse folder.
-        filesToDelete.add(new File(BaseDirectory + ModName + "/" + "eclipse/"));
+        filesToDelete.add(new File(dest + name + "/" + "eclipse"));
 
         for (File f : filesToDelete) {
-            f.delete();
+            if (f.isFile()) {
+                f.delete();
+            } else if (f.isDirectory()) {
+                FileUtils.deleteDirectory(f);
+            }
         }
     }
 
-    public ArrayList<String> GetMDKVersions() {
+    protected ArrayList<String> GetMDKVersions() {
         ArrayList<String> MDKVersions = new ArrayList<>();
 
         JSONParser parser = new JSONParser();
 
         try {
+            // TODO Grab JSON from cache.
+            File file = new File(System.getProperty("user.home") + "/mdk.json");
+
             Object obj = parser.parse(new FileReader("json/mdk.json"));
 
             JSONObject object = (JSONObject) obj;
@@ -126,6 +127,8 @@ public class MDKDownloader {
                     MDKVersions.add(completeName);
                 }
             }
+
+            // Collections.sort(MDKVersions);
 
         } catch (Exception e) {
             e.printStackTrace();

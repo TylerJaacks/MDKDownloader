@@ -6,10 +6,9 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -89,15 +88,26 @@ public class MDKDownloader {
 
         ArrayList<File> filesToDelete = new ArrayList<>();
 
-        filesToDelete.add(new File(dest + version + ".zip"));
-        filesToDelete.add(new File(dest + name + "/" + "README.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "Paulscode SoundSystem CodecIBXM License.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "Paulscode IBXM Library License.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "MinecraftForge-Credits.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "LICENSE-new.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "forge-" + s2 + "-changelog.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "CREDITS-fml.txt"));
-        filesToDelete.add(new File(dest + name + "/" + "eclipse"));
+        if (version.contains("1.1") || version.contains("1.2") || version.contains("1.3")
+                || version.contains("1.4") || version.contains("1.5") || version.contains("1.6")
+                || version.contains("1.7")) {
+            Files.move(Paths.get(dest + name + "/forge"), Paths.get(dest + "/forge"));
+            FileUtils.deleteDirectory(new File(dest + name));
+            Files.move(Paths.get(dest + "/forge"), Paths.get(dest + name));
+
+            filesToDelete.add(new File(dest + name + "/" + "minecraftforge_credits.txt"));
+            filesToDelete.add(new File(dest + version + ".zip"));
+        } else {
+            filesToDelete.add(new File(dest + version + ".zip"));
+            filesToDelete.add(new File(dest + name + "/" + "README.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "Paulscode SoundSystem CodecIBXM License.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "Paulscode IBXM Library License.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "MinecraftForge-Credits.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "LICENSE-new.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "forge-" + s2 + "-changelog.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "CREDITS-fml.txt"));
+            filesToDelete.add(new File(dest + name + "/" + "eclipse"));
+        }
 
         for (File f : filesToDelete) {
             if (f.isFile()) {
@@ -119,9 +129,26 @@ public class MDKDownloader {
             JSONObject object = (JSONObject) obj;
             JSONObject number = (JSONObject) object.get("number");
 
+            Object[] keys = number.keySet().toArray();
+            String[] stringifiedKeys = Arrays.copyOf(keys, keys.length, String[].class);
+
+            int[] numberKeys = new int[stringifiedKeys.length];
+
+            for(int i = 0; i < stringifiedKeys.length; i++){
+                numberKeys[i] = Integer.parseInt(stringifiedKeys[i]);
+            }
+
+            Arrays.sort(numberKeys); //I'm lazy and won't be doing this by hand ~ jewsofhazard
+
+            JSONObject largestNumberObject = (JSONObject) number.get(Integer.toString(numberKeys[numberKeys.length - 1]));
+
+            long buildMax = (long) largestNumberObject.get("build");
+
+            System.out.println(buildMax);
+
             String completeName = "";
 
-            for (int i = 1; i < 2415; i++) {
+            for (int i = 1; i < buildMax; i++) {
                 if (number.get("" + i) != null) {
                     JSONObject id = (JSONObject) number.get("" + i);
                     String mcversion = (String) id.get("mcversion");

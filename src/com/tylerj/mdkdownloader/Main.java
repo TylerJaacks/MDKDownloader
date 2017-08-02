@@ -25,7 +25,7 @@ public class Main extends Application {
         primaryStage.setResizable(false);
 
         // TODO Fix broken icon.
-        //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+        primaryStage.getIcons().add(new Image("file:icon.png"));
 
         MDKDownloader mdkDownloader = new MDKDownloader();
 

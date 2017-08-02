@@ -15,19 +15,27 @@ import java.util.zip.ZipInputStream;
 
 public class MDKDownloader {
     private final String URLBASE = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
+    private final String JSONFILE = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/json";
     private final int BUFFER_SIZE = 4096;
 
-    private String ModName = "";
-    private String BaseDirectory = "";
-    private String ZipName = "";
-
     public MDKDownloader() {
-        // TODO Download JSON.
+        try {
+            DownloadFile(JSONFILE, "mdk.json", System.getProperty("user.home"));
+        } catch (Exception e) {
+
+        }
     }
 
     private void DownloadFile(String sourceURL, String targetDirectory) throws IOException {
         URL url = new URL(sourceURL);
         String fileName = sourceURL.substring(sourceURL.lastIndexOf('/') + 1, sourceURL.length());
+        Path targetPath = new File(targetDirectory + File.separator + fileName).toPath();
+        Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private void DownloadFile(String sourceURL, String name, String targetDirectory) throws IOException {
+        URL url = new URL(sourceURL);
+        String fileName = name;
         Path targetPath = new File(targetDirectory + File.separator + fileName).toPath();
         Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
@@ -77,8 +85,6 @@ public class MDKDownloader {
 
         DownloadFile(URLBASE + s2 + "/" + version + ".zip", dest);
 
-        System.out.println(s2);
-
         Unzip(dest + version + ".zip", dest + "/" + name);
 
         ArrayList<File> filesToDelete = new ArrayList<>();
@@ -108,13 +114,12 @@ public class MDKDownloader {
         JSONParser parser = new JSONParser();
 
         try {
-            // TODO Grab JSON from cache.
-            File file = new File(System.getProperty("user.home") + "/mdk.json");
-
-            Object obj = parser.parse(new FileReader("json/mdk.json"));
+            Object obj = parser.parse(new FileReader(System.getProperty("user.home") + "/mdk.json"));
 
             JSONObject object = (JSONObject) obj;
             JSONObject number = (JSONObject) object.get("number");
+
+            String completeName = "";
 
             for (int i = 1; i < 2415; i++) {
                 if (number.get("" + i) != null) {
@@ -122,14 +127,17 @@ public class MDKDownloader {
                     String mcversion = (String) id.get("mcversion");
                     String mdkversion = (String) id.get("version");
 
-                    String completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";
+                    if (mdkversion.contains("1.1") || mdkversion.contains("1.2") || mdkversion.contains("1.3") || mdkversion.contains("1.4") || mdkversion.contains("1.5") || mdkversion.contains("1.6") || mdkversion.contains("1.7")) {
+                        completeName = "forge-" + mcversion + "-" + mdkversion + "-src";
+                    } else {
+                        completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";
+                    }
 
                     MDKVersions.add(completeName);
                 }
             }
 
             // Collections.sort(MDKVersions);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

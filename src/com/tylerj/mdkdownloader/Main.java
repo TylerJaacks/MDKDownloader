@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("MDKDownloader v1.0");
+        primaryStage.setTitle("MDKDownloader v2.0");
         primaryStage.setResizable(false);
 
         // TODO Fix broken icon.
@@ -30,7 +30,7 @@ public class Main extends Application {
         MDKDownloader mdkDownloader = new MDKDownloader();
 
         GridPane grid = new GridPane();
-        Scene scene = new Scene(grid, 400, 150);
+        Scene scene = new Scene(grid, 400, 200);
 
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -51,9 +51,16 @@ public class Main extends Application {
         forgeVersionsCombobox.setMinWidth(250);
         grid.add(forgeVersionsCombobox, 1, 2);
 
+        Label downloadDirectory = new Label("Directory:");
+        grid.add(downloadDirectory, 0, 3);
+
+        TextField downloadDirectoryTextEdit = new TextField();
+        downloadDirectoryTextEdit.setMinWidth(250);
+        grid.add(downloadDirectoryTextEdit, 1, 3);
+
         Button prepareEnviromentButton = new Button();
         prepareEnviromentButton.setMinWidth(250);
-        grid.add(prepareEnviromentButton, 1, 4);
+        grid.add(prepareEnviromentButton, 1, 5);
 
         for (String s : mdkDownloader.GetMDKVersions()) {
             forgeVersionsCombobox.getItems().add(s);
@@ -64,7 +71,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    mdkDownloader.PrepareEnvironment(forgeVersionsCombobox.getValue().toString(), System.getProperty("user.home") + "/", modNameTextField.getText());
+                    mdkDownloader.PrepareEnvironment(forgeVersionsCombobox.getValue().toString(), downloadDirectoryTextEdit.getText() + "/", modNameTextField.getText());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

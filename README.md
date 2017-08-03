@@ -6,7 +6,7 @@ This simple application downloads any version of MDK or forge, and prepares the 
 <img src='https://github.com/TylerJaacks/MDKDownloader/blob/master/media/demo.gif?raw=true'/>
 </p><br>
 
-## Videos:
+## Screenshots:
 <p>
 <img src='https://github.com/TylerJaacks/MDKDownloader/blob/master/media/screenshot.png'/>
 </p><br>

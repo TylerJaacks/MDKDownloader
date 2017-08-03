@@ -20,6 +20,7 @@ This simple application downloads any version of MDK or forge, and prepares the 
 [*] = Working [✔️] = Done
 
 ## Discovered Bugs:
+There are no known bugs, if you find a bug please report using the Github issue tracker.
 
 ## Main Accomplishments:
 - [✔️] Index all MDK and Forge versions using json.

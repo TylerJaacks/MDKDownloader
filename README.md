@@ -3,11 +3,13 @@ This simple application downloads any version of MDK or forge, and prepares the 
 
 ## Pictures:
 <p>
-
+<img src='https://raw.githubusercontent.com/TylerJaacks/MDKDownloader/master/media/screenshot.png' title='Intro Video' width='200' height='357' alt='Intro Video' />
 </p><br>
 
 ## Videos:
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/S7D9N"><a href="//imgur.com/S7D9N"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<p>
+<img src='https://github.com/TylerJaacks/MDKDownloader/blob/master/media/demo.gif?raw=true' title='Intro Video' width='200' height='357' alt='Intro Video' />
+</p><br>
 
 ## Notes:
 - IntelliJ Ultimatae 2017.2 and Java 8

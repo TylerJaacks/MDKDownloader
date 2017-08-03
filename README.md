@@ -16,6 +16,7 @@ This simple application downloads any version of MDK or forge, and prepares the 
 - Dependencies: commons-io:commons-io:2.5 and com.googlecode.json-simple:json-simple:1.1.1
 
 ## TODO list:
+There are currently no todos.
 
 [*] = Working [✔️] = Done
 

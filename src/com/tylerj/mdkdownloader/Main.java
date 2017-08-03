@@ -71,7 +71,8 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    mdkDownloader.PrepareEnvironment(forgeVersionsCombobox.getValue().toString(), downloadDirectoryTextEdit.getText() + "/", modNameTextField.getText());
+                    mdkDownloader.PrepareEnvironment(forgeVersionsCombobox.getValue().toString(),
+                            downloadDirectoryTextEdit.getText() + "/", modNameTextField.getText());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

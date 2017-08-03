@@ -88,9 +88,9 @@ public class MDKDownloader {
 
         ArrayList<File> filesToDelete = new ArrayList<>();
 
-        if (version.contains("1.1") || version.contains("1.2") || version.contains("1.3")
-                || version.contains("1.4") || version.contains("1.5") || version.contains("1.6")
-                || version.contains("1.7")) {
+        if (version.contains("1.1-") || version.contains("1.2-") || version.contains("1.3-")
+                || version.contains("1.4-") || version.contains("1.5-") || version.contains("1.6-")
+                || version.contains("1.7-")) {
             Files.move(Paths.get(dest + name + "/forge"), Paths.get(dest + "/forge"));
             FileUtils.deleteDirectory(new File(dest + name));
             Files.move(Paths.get(dest + "/forge"), Paths.get(dest + name));
@@ -129,6 +129,8 @@ public class MDKDownloader {
             JSONObject object = (JSONObject) obj;
             JSONObject number = (JSONObject) object.get("number");
 
+
+            // Thanks to https://github.com/Jewsofhazard for the help writing the buildMax code
             Object[] keys = number.keySet().toArray();
             String[] stringifiedKeys = Arrays.copyOf(keys, keys.length, String[].class);
 
@@ -144,8 +146,6 @@ public class MDKDownloader {
 
             long buildMax = (long) largestNumberObject.get("build");
 
-            System.out.println(buildMax);
-
             String completeName = "";
 
             for (int i = 1; i < buildMax; i++) {
@@ -153,10 +153,11 @@ public class MDKDownloader {
                     JSONObject id = (JSONObject) number.get("" + i);
                     String mcversion = (String) id.get("mcversion");
                     String mdkversion = (String) id.get("version");
+                    String fullname = "forge-" + mcversion + "-" + mdkversion + "-src";
 
-                    if (mdkversion.contains("1.1") || mdkversion.contains("1.2") || mdkversion.contains("1.3")
-                            || mdkversion.contains("1.4") || mdkversion.contains("1.5") || mdkversion.contains("1.6")
-                            || mdkversion.contains("1.7")) {
+                    if (fullname.contains("1.1-") || fullname.contains("1.2-") || fullname.contains("1.3-")
+                            || fullname.contains("1.4-") || fullname.contains("1.5-") || fullname.contains("1.6-")
+                            || fullname.contains("1.7-")) {
                         completeName = "forge-" + mcversion + "-" + mdkversion + "-src";
                     } else {
                         completeName = "forge-" + mcversion + "-" + mdkversion + "-mdk";
@@ -165,8 +166,6 @@ public class MDKDownloader {
                     MDKVersions.add(completeName);
                 }
             }
-
-            // Collections.sort(MDKVersions);
         } catch (Exception e) {
             e.printStackTrace();
         }

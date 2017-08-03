@@ -7,9 +7,7 @@ This simple application downloads any version of MDK or forge, and prepares the 
 </p><br>
 
 ## Videos:
-<p>
-
-</p><br>
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/S7D9N"><a href="//imgur.com/S7D9N"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ## Notes:
 - IntelliJ Ultimatae 2017.2 and Java 8

@@ -30,6 +30,6 @@ There are no known bugs, if you find a bug please report using the Github issue 
 - [✔️] Java FileIO and Apache Commons IO File IO.
 
 ## Additional Sources
-- Stackoverflow, used samples for user storage and NSTimer help, sorry I don't remember every post I viewed.
+- Stackoverflow, used samples for downloading and unzipping, sorry I don't remember every post I viewed.
 - github.com/Jewsofhazard for get the last element in a JSON object code.
 - Wong Guan, for his README that I am using as a template.

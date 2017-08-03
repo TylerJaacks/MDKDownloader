@@ -1,11 +1,6 @@
 # MDKDownloader
 This simple application downloads any version of MDK or forge, and prepares the environment, so you can start making your Minecraft mod.
 
-## Pictures:
-<p>
-<img src='https://github.com/TylerJaacks/MDKDownloader/blob/master/media/demo.gif?raw=true' title='Intro Video' width='412' height='237' alt='Intro Video' />
-</p><br>
-
 ## Videos:
 <p>
 <img src='https://raw.githubusercontent.com/TylerJaacks/MDKDownloader/master/media/screenshot.png' title='Intro Video' width='1920' height='1080' alt='Intro Video' />

@@ -14,12 +14,12 @@ import java.util.zip.ZipInputStream;
 
 public class MDKDownloader {
     private final String URLBASE = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
-    private final String JSONFILE = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/json";
+    private final String JSONFILE = URLBASE + "/json";
     private final int BUFFER_SIZE = 4096;
 
     public MDKDownloader() {
         try {
-            DownloadFile(JSONFILE, "mdk.json", System.getProperty("user.home"));
+            DownloadFileWithName(JSONFILE, "mdk.json", System.getProperty("user.home"));
         } catch (Exception e) {
 
         }
@@ -32,7 +32,7 @@ public class MDKDownloader {
         Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private void DownloadFile(String sourceURL, String name, String targetDirectory) throws IOException {
+    private void DownloadFileWithName(String sourceURL, String name, String targetDirectory) throws IOException {
         URL url = new URL(sourceURL);
         String fileName = name;
         Path targetPath = new File(targetDirectory + File.separator + fileName).toPath();
@@ -129,8 +129,7 @@ public class MDKDownloader {
             JSONObject object = (JSONObject) obj;
             JSONObject number = (JSONObject) object.get("number");
 
-
-            // Thanks to https://github.com/Jewsofhazard for the help writing the buildMax code
+            // Thanks to https://github.com/hazarddev for the help writing the buildMax code
             Object[] keys = number.keySet().toArray();
             String[] stringifiedKeys = Arrays.copyOf(keys, keys.length, String[].class);
 

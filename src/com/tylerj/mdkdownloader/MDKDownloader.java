@@ -5,10 +5,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -78,9 +80,11 @@ public class MDKDownloader {
         zipIn.close();
     }
 
-    protected void PrepareEnvironment(String version, String dest, String name) throws Exception {
+    protected void PrepareEnvironment(String version, String dest, String name, String packageId) throws Exception {
         String s1 = version.substring(6, version.length());
         String s2 = s1.substring(0, s1.length() - 4);
+        String modId = name.toLowerCase();
+        String packageName = packageId;
 
         DownloadFile(URLBASE + s2 + "/" + version + ".zip", dest);
 
@@ -116,6 +120,8 @@ public class MDKDownloader {
                 FileUtils.deleteDirectory(f);
             }
         }
+
+        // TODO Replace Java file and delete extra directories
     }
 
     protected ArrayList<String> GetMDKVersions() {
@@ -165,6 +171,8 @@ public class MDKDownloader {
                     MDKVersions.add(completeName);
                 }
             }
+
+            Collections.reverse(MDKVersions);
         } catch (Exception e) {
             e.printStackTrace();
         }

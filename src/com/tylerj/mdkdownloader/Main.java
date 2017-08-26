@@ -21,6 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // TODO Add TextEdit field hints.
         primaryStage.setTitle("MDKDownloader v2.0");
         primaryStage.setResizable(false);
 
@@ -43,19 +44,26 @@ public class Main extends Application {
         modNameTextField.setMinWidth(250);
         grid.add(modNameTextField, 1, 1);
 
+        Label modPackageLabel = new Label("Mod Package:");
+        grid.add(modPackageLabel, 0, 2);
+
+        TextField modPackageTextField = new TextField();
+        modNameTextField.setMinWidth(250);
+        grid.add(modPackageTextField, 1, 2);
+
         Label forgeVersionLabel = new Label("Forge Version:");
-        grid.add(forgeVersionLabel, 0, 2);
+        grid.add(forgeVersionLabel, 0, 3);
 
         ComboBox forgeVersionsCombobox = new ComboBox();
         forgeVersionsCombobox.setMinWidth(250);
-        grid.add(forgeVersionsCombobox, 1, 2);
+        grid.add(forgeVersionsCombobox, 1, 3);
 
         Label downloadDirectory = new Label("Directory:");
-        grid.add(downloadDirectory, 0, 3);
+        grid.add(downloadDirectory, 0, 4);
 
         TextField downloadDirectoryTextEdit = new TextField();
         downloadDirectoryTextEdit.setMinWidth(250);
-        grid.add(downloadDirectoryTextEdit, 1, 3);
+        grid.add(downloadDirectoryTextEdit, 1, 4);
 
         Button prepareEnviromentButton = new Button();
         prepareEnviromentButton.setMinWidth(250);
@@ -71,7 +79,8 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 try {
                     mdkDownloader.PrepareEnvironment(forgeVersionsCombobox.getValue().toString(),
-                            downloadDirectoryTextEdit.getText() + "/", modNameTextField.getText());
+                            downloadDirectoryTextEdit.getText() + "/", modNameTextField.getText(),
+                            modPackageTextField.getText() + modNameTextField.getText());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

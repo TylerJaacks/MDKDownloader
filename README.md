@@ -16,12 +16,15 @@ This simple application downloads any version of MDK or forge, and prepares the 
 - Dependencies: commons-io:commons-io:2.5 and com.googlecode.json-simple:json-simple:1.1.1
 
 ## TODO list:
-There are currently no todos.
+- [] Text field defaults.
+- [] Code cleanup.
+- [] Replace the example mod based on the package id.
+- [] Replace directory based on the package id.
 
-[*] = Working [✔️] = Done
+[] = Not implemented [*] = Working [✔️] = Done
 
 ## Discovered Bugs:
-There are no known bugs, if you find a bug please report using the Github issue tracker.
+- There appears to be some versions which will not download.
 
 ## Main Accomplishments:
 - [✔️] Index all MDK and Forge versions using json.
